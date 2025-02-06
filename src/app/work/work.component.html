@@ -1,0 +1,230 @@
+<div class="pg-background">
+  <div class="top-module">
+    <div class="top-left-part">
+      <img src="assets/data/icons/head-icon.svg" alt="">
+      <h1>Контрольные карточки</h1>
+    </div>
+    <div class="top-right-part">
+      <div class="Searching" style="display: none;">
+        <div class="input-container">
+          <input type="text" class="text" placeholder="Введите текст" (input)="onSearch($event)" />
+          <img src="assets/data/icons/search-lupa.svg" alt="Иконка" class="icon" />
+        </div>
+      </div>
+      <div class="for-btn">
+        <button class="btn-blue" (click)="openModal()">
+          <img src="assets/data/icons/btn-plus.svg" alt="">
+          Создать задание
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="top-two-module">
+    <div class="t-t-left-part">
+      <div class="all" routerLink="/all-tasks">
+        <img src="assets/data/icons/menu.svg" alt="">
+        <p>Все задания</p>
+      </div>
+      <div class="at-work">
+        <img src="assets/data/icons/inwork.svg" alt="">
+        <p>В работе</p>
+      </div>
+      <div class="ready" routerLink="/ready">
+        <img src="assets/data/icons/ready.svg" alt="">
+        <p>Готово</p>
+      </div>
+    </div>
+    <div class="t-t-right-part">
+      <div class="for-red-users" (click)="openUsersModal()">
+        <p>Просмотр исполнителей</p>
+      </div>
+      <div class="dropdown" (click)="$event.stopPropagation()">
+        <button class="dropdown-toggle" (click)="toggleDropdown()">
+          {{ selectedItem || 'Выбрать исполнителей' }}
+          <img [class.rotated]="isOpen" src="assets/data/icons/strelkaforspisok.svg" alt="Arrow">
+        </button>
+        <div class="dropdown-menu" *ngIf="isOpen">
+          <div class="dropdown-item" *ngFor="let user of users">
+            <label>
+              <input type="checkbox" [(ngModel)]="user.selectedForFilter" (change)="user.username ? togglePerformerSelectionForFilter(user.username) : null">
+              <span></span> {{ user.username }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main-module">
+    <div class="main-head">
+      <!-- <p class="nomer-head" (click)="sortBy('id')">№</p> -->
+      <p class="nomer-head">№</p>
+      <p class="task-head" (click)="sortBy('title')">Задача</p>
+      <p class="performers-head" (click)="sortBy('executors')">Исполнители</p>
+      <p class="start-time-head" (click)="sortBy('creation_date')">Начало</p>
+      <p class="end-time-head" (click)="sortBy('execution_date')">Завершение</p>
+      <p class="status-head">Статус</p>
+      <p class="actions-head">Действия</p>
+    </div>
+    <div class="spisok">
+      <div *ngFor="let task of filteredTasks; let i = index" class="main-main">
+        <p class="nomer">{{ i + 1 }}</p>
+        <p class="task">{{ task.title }}</p>
+        <div class="performers">
+          <p *ngFor="let performer of task.executors">{{ performer }}</p>
+        </div>
+        <p class="start-time">{{ task.creation_date }}</p>
+        <p class="end-time">{{ task.execution_date }}</p>
+        <p class="status" [ngClass]="getStatusClass(task.execution_mark)" (click)="toggleStatusDropdown(task)">{{ task.execution_mark }}</p>
+        <div class="actions">
+          <img src="assets/data/icons/download.svg" (click)="openDownloadSizeModal(task.id)">
+          <img src="assets/data/icons/redactor.svg" alt="" (click)="openEditModal(task)">
+          <img class="delete-img" src="assets/data/icons/delete.svg" alt="" (click)="deleteTask(task.id)">
+        </div>
+        
+        <!-- Модальное окно для выбора размера шрифта -->
+        <div *ngIf="showPrintOne && currentDownloadTaskId === task.id" class="print-size">
+          <label>Размер шрифта</label>
+          <input type="number" [(ngModel)]="fontSize" placeholder="Введите размер шрифта">
+          <div class="for-buttons">
+            <button (click)="downloadFileWithFontSize(task.id)">Скачать</button>
+            <button (click)="closeDownloadSizeModal()">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+      <div class="line">
+        <h1 class="zag">Новое задание</h1>
+        <img (click)="closeModal($event)" src="assets/data/icons/big-delete.svg" />
+      </div>
+      <div class="opisanie">
+        <textarea [(ngModel)]="newTaskDescription" placeholder="Напишите задание для выполнения"></textarea>
+      </div>
+      <div class="bottom-module">
+        <div class="select-users">
+          <div class="dropdown">
+            <div class="dropdown-content">
+              <label *ngFor="let user of users">
+                <input type="checkbox" [(ngModel)]="user.selectedForNewTask" (change)="togglePerformerSelection(user.username)">
+                <span></span> {{ user.username }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="select-date">
+          <div class="select-start">
+            <p>Начало</p>
+            <input type="date" [(ngModel)]="startDate">
+          </div>
+          <div class="select-end">
+            <p>Завершение</p>
+            <input type="date" [(ngModel)]="endDate">
+          </div>
+        </div>
+      </div>
+      <div class="for-btn-end">
+        <button class="btn-blue" (click)="createNewTask()">
+          <img src="assets/data/icons/btn-plus.svg" alt="">
+          Создать задание
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- окно для редактирования -->
+  <div class="modal" *ngIf="showEditModal">
+    <div class="modal-content">
+      <div class="line">
+        <h1 class="zag">Редактировать задание</h1>
+        <img (click)="closeEditModal($event)" src="assets/data/icons/big-delete.svg" />
+      </div>
+      <div class="opisanie">
+        <textarea [(ngModel)]="editingTask.title" placeholder="Напишите задание для выполнения"></textarea>
+      </div>
+      <div class="bottom-module">
+        <div class="select-users">
+          <div class="dropdown">
+            <div class="dropdown-content">
+              <label *ngFor="let user of users">
+                <input type="checkbox" [(ngModel)]="user.selectedForEditTask">
+                <span></span> {{ user.username }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="select-date">
+          <div class="select-start">
+            <p>Начало</p>
+            <input type="date" [(ngModel)]="editingTask.creation_date">
+          </div>
+          <div class="select-end">
+            <p>Завершение</p>
+            <input type="date" [(ngModel)]="editingTask.execution_date">
+          </div>
+        </div>
+      </div>
+      <div class="for-btn-end">
+        <button class="btn-blue" (click)="saveTask()">
+          <img src="assets/data/icons/btn-plus.svg" alt="">
+          Сохранить изменения
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- окно для редактирования пользователей -->
+<div class="modal-for-redactor-users" *ngIf="showUsersModal">
+  <div class="modal-content-users">
+    <div class="line-users">
+      <h1 class="zag-users">Исполнители</h1>
+      <img (click)="closeUsersModal($event)" src="assets/data/icons/big-delete.svg" />
+    </div>
+    <div class="main-content-users">
+      <div class="select-users">
+        <div class="input-container">
+          <input type="text" [(ngModel)]="newUserName" placeholder="Введите имя нового пользователя" />
+          <button (click)="addUser()">Добавить пользователя</button>
+        </div>
+        <div class="user-list">
+          <div class="user-item" *ngFor="let user of users">
+            <span>{{ user.username }}</span>
+            <img class="download-img" src="assets/data/icons/download.svg" alt="" (click)="openUserDownloadModal(user.id)">
+            <img src="assets/data/icons/delete.svg" (click)="confirmDeleteUser(user)" />
+          </div>
+        </div>
+        <!-- Модальное окно для выбора размера шрифта -->
+        <div *ngIf="showUserDownloadModal && currentUserId !== null" class="print-size" style="top: 40%; right: 30%;">
+          <label>Размер шрифта:</label>
+          <input type="number" [(ngModel)]="fontSize" placeholder="Введите размер шрифта">
+          <div class="for-buttons">
+            <button (click)="downloadUserTasksWithFontSize()">Скачать</button>
+            <button (click)="closeUserDownloadModal()">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- окно для подтверждения удаления пользователя -->
+  <div class="modal-delete" *ngIf="showDeleteConfirmation">
+    <div class="modal-content-delete">
+      <div class="line-delete">
+        <h1 class="zag-delete">Подтверждение удаления</h1>
+        <img (click)="closeDeleteConfirmation($event)" src="assets/data/icons/big-delete.svg" />
+      </div>
+      <div class="confirmation-message">
+        <p>Вы точно хотите удалить пользователя:<br> "{{ userToDelete?.username }}"?</p>
+      </div>
+      <div class="for-btn-end-delete">
+        <button class="btn-blue" (click)="deleteUser()">Да</button>
+        <button class="btn-blue" (click)="closeDeleteConfirmation($event)">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
