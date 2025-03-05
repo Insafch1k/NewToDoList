@@ -1,791 +1,739 @@
 @font-face {
-    font-family: "Montserrat";
-    font-weight: 400;
-    src: local("Montserrat"),
-        url("../src/assets/data/fonts/fonts/Montserrat-Regular.woff") format("woff");
+  font-family: "Montserrat";
+  font-weight: 400;
+  src: local("Montserrat"),
+      url("../src/assets/data/fonts/fonts/Montserrat-Regular.woff") format("woff");
 }
 
 @font-face {
-    font-family: "Montserrat";
-    font-weight: 500;
-    src: local("Montserrat"),
-        url("../src/assets/data/fonts/fonts/Montserrat-SemiBold.woff") format("woff");
+  font-family: "Montserrat";
+  font-weight: 500;
+  src: local("Montserrat"),
+      url("../src/assets/data/fonts/fonts/Montserrat-SemiBold.woff") format("woff");
 }
 
 
 
 body {
-    background-color: rgba(249, 249, 251, 1);
-    font-family: "Montserrat";
+  background-color: rgba(249, 249, 251, 1);
+  font-family: "Montserrat";
 }
 html,
 body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(249, 249, 251, 1);
-    font-family: "Montserrat";
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(249, 249, 251, 1);
+  font-family: "Montserrat";
 }
 
 * {
-    scrollbar-width: thin;
-    scrollbar-color: #7eb3c1 #f5f5f5;
+  scrollbar-width: thin;
+  scrollbar-color: #7eb3c1 #f5f5f5;
 }
 * {
-    -webkit-tap-highlight-color: transparent;
-  }
+  -webkit-tap-highlight-color: transparent;
+}
 /* для Chrome/Edge/Safari */
 *::-webkit-scrollbar {
-    height: 12px;
-    width: 12px;
+  height: 12px;
+  width: 12px;
 }
 *::-webkit-scrollbar-track {
-    background: #f5f5f5;
+  background: #f5f5f5;
 }
 *::-webkit-scrollbar-thumb {
-    background-color: #7eb3c1;
-    border-radius: 5px;
-    border: 3px solid #f5f5f5;
+  background-color: #7eb3c1;
+  border-radius: 5px;
+  border: 3px solid #f5f5f5;
 }
 
 
 h1 {
-    margin: 0;
-    padding: 0;
-    color: rgba(0, 0, 0, 1);
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 1);
 }
 h2 {
-    margin: 0;
-    padding: 0;
-    color: rgba(0, 0, 0, 1);
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 1);
 }
 p {
-    margin: 0;
-    padding: 0;
-    color: rgba(0, 0, 0, 1);
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 1);
 }
 button {
-    cursor: pointer;
-    font-family: "Montserrat";
-    border: none;
-    outline: none; /* Убирает стандартный контур */
-    -webkit-appearance: none; /* Убирает стандартные стили для WebKit браузеров */
-    -moz-appearance: none; /* Убирает стандартные стили для Firefox */
-    appearance: none; /* Убирает стандартные стили для других браузеров */
+  cursor: pointer;
+  font-family: "Montserrat";
+  border: none;
+  outline: none; /* Убирает стандартный контур */
+  -webkit-appearance: none; /* Убирает стандартные стили для WebKit браузеров */
+  -moz-appearance: none; /* Убирает стандартные стили для Firefox */
+  appearance: none; /* Убирает стандартные стили для других браузеров */
 }
 textarea{
-  outline: none; /* Убирает стандартный контур */
-    -webkit-appearance: none; /* Убирает стандартные стили для WebKit браузеров */
-    -moz-appearance: none; /* Убирает стандартные стили для Firefox */
-    appearance: none; /* Убирает стандартные стили для других браузеров */
+outline: none; /* Убирает стандартный контур */
+  -webkit-appearance: none; /* Убирает стандартные стили для WebKit браузеров */
+  -moz-appearance: none; /* Убирает стандартные стили для Firefox */
+  appearance: none; /* Убирает стандартные стили для других браузеров */
 }
 
 
 .pg-background {
-  padding: 10px;
+padding: 10px;
 }
 
 .top-module {
-  padding-top: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+padding-top: 20px;
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
 
 .top-left-part {
-  user-select: none;
-  display: flex;
-  align-items: center;
-  h1 {
-    font-size: 2.7vw;
-    padding-left: 5px;
-    margin: 0; // Убираем стандартный отступ у заголовка
-  }
+user-select: none;
+display: flex;
+align-items: center;
+h1 {
+  font-size: 2.7vw;
+  padding-left: 5px;
+  margin: 0; // Убираем стандартный отступ у заголовка
+}
 }
 
 .top-right-part {
-  user-select: none;
+user-select: none;
+display: flex;
+align-items: center;
+padding-right: 15px;
+
+.Searching {
   display: flex;
   align-items: center;
-  padding-right: 15px;
+  position: relative;
+  width: 300px; // начальная ширина
+  transition: width 0.3s ease;
 
-  .Searching {
-    display: flex;
-    align-items: center;
-    position: relative;
-    width: 300px; // начальная ширина
-    transition: width 0.3s ease;
-
-    &:focus-within {
-      width: 400px; // ширина при фокусе
-    }
-
-    .input-container {
-      position: relative;
-      width: 100%;
-
-      .text {
-        padding: 7px 10px; // отступы вокруг текста
-        padding-right: 40px; // отступ справа для иконки
-        width: 100%; // занимать оставшееся пространство
-        border-radius: 10px;
-        border: none;
-        box-sizing: border-box; // учитываем padding в ширине
-        font-size: 1.2vw; // размер шрифта
-      }
-
-      .icon {
-        position: absolute; // абсолютное позиционирование для иконки
-        right: 10px; // отступ от правого края
-        top: 50%; // центрируем по вертикали
-        transform: translateY(-50%); // корректировка на высоту иконки
-        pointer-events: none; // не мешает взаимодействию с инпутом
-      }
-    }
+  &:focus-within {
+    width: 400px; // ширина при фокусе
   }
 
-  .for-btn {
-    display: flex;
-    align-items: center;
-    margin-left: 20px;
+  .input-container {
+    position: relative;
+    width: 100%;
 
-    .btn-blue {
-      display: flex;
-      align-items: center;
-      background-color: rgba(35, 104, 255, 1);
+    .text {
+      padding: 7px 10px; // отступы вокруг текста
+      padding-right: 40px; // отступ справа для иконки
+      width: 100%; // занимать оставшееся пространство
       border-radius: 10px;
       border: none;
-      padding: 7px 20px;
-      color: white;
-      cursor: pointer;
-      font-size: 1.2vw; // Убедимся, что размер шрифта одинаковый
+      box-sizing: border-box; // учитываем padding в ширине
+      font-size: 1.2vw; // размер шрифта
+    }
 
-      img {
-        margin-right: 10px;
-        width: 20px; // Фиксированная ширина иконки
-        height: 20px; // Фиксированная высота иконки
-      }
+    .icon {
+      position: absolute; // абсолютное позиционирование для иконки
+      right: 10px; // отступ от правого края
+      top: 50%; // центрируем по вертикали
+      transform: translateY(-50%); // корректировка на высоту иконки
+      pointer-events: none; // не мешает взаимодействию с инпутом
     }
   }
 }
 
-.top-two-module {
-  padding-top: 20px;
-  padding-left: 5px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-}
-
-.t-t-left-part {
-  display: flex;
-  align-items: center;
-  p {
-    font-size: 1.4vw;
-    padding-left: 5px;
-    margin: 0; // Убираем стандартный отступ у заголовка
-    font-weight: 500;
-  }
-}
-
-.all {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-}
-
-.at-work {
+.for-btn {
   display: flex;
   align-items: center;
   margin-left: 20px;
-  cursor: pointer;
+
+  .btn-blue {
+    display: flex;
+    align-items: center;
+    background-color: rgba(35, 104, 255, 1);
+    border-radius: 10px;
+    border: none;
+    padding: 7px 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2vw; // Убедимся, что размер шрифта одинаковый
+
+    img {
+      margin-right: 10px;
+      width: 20px; // Фиксированная ширина иконки
+      height: 20px; // Фиксированная высота иконки
+    }
+  }
+}
+}
+
+.top-two-module {
+padding-top: 20px;
+padding-left: 5px;
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+user-select: none;
+}
+
+.t-t-left-part {
+display: flex;
+align-items: center;
+p {
+  font-size: 1.4vw;
+  padding-left: 5px;
+  margin: 0; // Убираем стандартный отступ у заголовка
+  font-weight: 500;
+}
+}
+
+.all {
+display: flex;
+align-items: center;
+cursor: pointer;
+position: relative;
+}
+
+.at-work {
+display: flex;
+align-items: center;
+margin-left: 20px;
+cursor: pointer;
 }
 
 .ready {
-  display: flex;
-  align-items: center;
-  margin-left: 35px;
-  cursor: pointer;
+display: flex;
+align-items: center;
+margin-left: 35px;
+cursor: pointer;
 }
 
 .t-t-right-part {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  width: 50%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: relative;
+width: 50%;
 }
 
 .for-red-users {
-  cursor: pointer;
-  p {
-    font-size: 1.2vw;
-    margin: 0; // Убираем стандартный отступ у заголовка
-    font-weight: 500;
-  }
+cursor: pointer;
+p {
+  font-size: 1.2vw;
+  margin: 0; // Убираем стандартный отступ у заголовка
+  font-weight: 500;
+}
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+position: relative;
+display: inline-block;
 }
 
 .dropdown-toggle {
-  background-color: rgba(249, 249, 251, 1);
-  border: none;
-  margin-right: 75px;
-  padding: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 500;
-  font-size: 1.2vw;
-  img {
-    margin-left: 5px;
-    transition: transform 0.3s;
-  }
+background-color: rgba(249, 249, 251, 1);
+border: none;
+margin-right: 75px;
+padding: 10px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: space-between;
+font-weight: 500;
+font-size: 1.2vw;
+img {
+  margin-left: 5px;
+  transition: transform 0.3s;
+}
 
-  .rotated {
-    transform: rotate(180deg);
-  }
+.rotated {
+  transform: rotate(180deg);
+}
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: -7vw;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  z-index: 1000;
-  width: 30vw;
-  font-size: 1.2vw;
-  max-height: 350px;
-  overflow: auto;
-  scrollbar-width: thin; /* Для Firefox */
-  scrollbar-color: #888 #f1f1f1; /* Для Firefox */
+position: absolute;
+top: 100%;
+left: -7vw;
+background-color: #fff;
+border: 1px solid #ccc;
+z-index: 1000;
+width: 30vw;
+font-size: 1.2vw;
+max-height: 350px;
+overflow: auto;
+scrollbar-width: thin; /* Для Firefox */
+scrollbar-color: #888 #f1f1f1; /* Для Firefox */
 
-  /* Для WebKit-браузеров (Chrome, Safari) */
-  &::-webkit-scrollbar {
-    width: 12px;
-  }
+/* Для WebKit-браузеров (Chrome, Safari) */
+&::-webkit-scrollbar {
+  width: 12px;
+}
 
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
+&::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
 
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-    border: 3px solid #f1f1f1;
-  }
+&::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  border: 3px solid #f1f1f1;
+}
 
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
+&::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 }
 
 .dropdown-item {
-  padding: 10px;
+padding: 10px;
+cursor: pointer;
+
+&:hover {
+  background-color: #d4dbe1;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 5px;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 1.2vw;
 
-  &:hover {
-    background-color: #d4dbe1;
+  input[type="checkbox"] {
+    display: none; /* Скрываем стандартный чекбокс */
   }
 
-  label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    padding: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 1.2vw;
-
-    input[type="checkbox"] {
-      display: none; /* Скрываем стандартный чекбокс */
-    }
-
-    input[type="checkbox"] + span {
-      display: inline-block;
-      width: 24px; /* Увеличиваем размер чекбокса */
-      height: 24px; /* Увеличиваем размер чекбокса */
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      background-color: white;
-      margin-right: 10px;
-      position: relative;
-      transition: background-color 0.3s ease; /* Добавляем плавный переход для фона */
-    }
-
-    input[type="checkbox"]:checked + span {
-      background-color: #2368ff; /* Цвет фона при выборе */
-      border-color: #2368ff; /* Цвет границы при выборе */
-    }
+  input[type="checkbox"] + span {
+    display: inline-block;
+    width: 24px; /* Увеличиваем размер чекбокса */
+    height: 24px; /* Увеличиваем размер чекбокса */
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    margin-right: 10px;
+    position: relative;
+    transition: background-color 0.3s ease; /* Добавляем плавный переход для фона */
   }
+
+  input[type="checkbox"]:checked + span {
+    background-color: #2368ff; /* Цвет фона при выборе */
+    border-color: #2368ff; /* Цвет границы при выборе */
+  }
+}
 }
 
 .main-module {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
+width: 100%;
+display: flex;
+flex-direction: column;
+align-self: center;
 }
 
 .main-head {
-  padding-top: 20px;
-  display: flex;
-  align-items: center;
-  padding-bottom: 20px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+padding-top: 20px;
+display: flex;
+align-items: center;
+padding-bottom: 20px;
+border-top: 1px solid black;
+border-bottom: 1px solid black;
 
-  .nomer-head {
-    width: 3%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-  }
+.nomer-head {
+  width: 3%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+}
 
-  .task-head {
-    width: 36%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-    cursor: pointer;
-  }
+.task-head {
+  width: 36%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+  cursor: pointer;
+}
 
-  .performers-head {
-    width: 22%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-    cursor: pointer;
-  }
+.performers-head {
+  width: 22%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+  cursor: pointer;
+}
 
-  .start-time-head {
-    width: 10%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-    cursor: pointer;
-  }
+.start-time-head {
+  width: 10%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+  cursor: pointer;
+}
 
-  .end-time-head {
-    width: 10%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-    cursor: pointer;
-  }
+.end-time-head {
+  width: 10%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+  cursor: pointer;
+}
 
-  .status-head {
-    width: 8%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-  }
+.status-head {
+  width: 8%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+}
 
-  .actions-head {
-    width: 8%;
-    padding: 3px;
-    font-size: 1.4vw;
-    text-align: center;
-  }
+.actions-head {
+  width: 8%;
+  padding: 3px;
+  font-size: 1.4vw;
+  text-align: center;
+}
 }
 
 .spisok {
-  max-height: 66vh;
-  overflow: auto;
-  scrollbar-width: thin; /* Для Firefox */
-  scrollbar-color: #888 #f1f1f1; /* Для Firefox */
+max-height: 66vh;
+overflow: auto;
+scrollbar-width: thin; /* Для Firefox */
+scrollbar-color: #888 #f1f1f1; /* Для Firefox */
 
-  /* Для WebKit-браузеров (Chrome, Safari) */
-  &::-webkit-scrollbar {
-    width: 12px;
-  }
+/* Для WebKit-браузеров (Chrome, Safari) */
+&::-webkit-scrollbar {
+  width: 12px;
+}
 
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
+&::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
 
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-    border: 3px solid #f1f1f1;
-  }
+&::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  border: 3px solid #f1f1f1;
+}
 
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
+&::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 }
 
 .main-main {
+display: flex;
+width: 100%;
+align-items: center;
+font-weight: 500;
+padding: 10px 0px;
+p{
+  white-space: wrap;
+}
+&:hover {
+  background-color: #e1effc;
+}
+
+.nomer {
+  width: 2%;
+  padding: 0.5%;
+  font-size: 1.2vw;
+  text-align: center;
+}
+
+.task {
+  padding: 0.5%;
+  width: 35%;
+  font-size: 1.2vw;
+  white-space: wrap;
+}
+
+.performers {
+  width: 23%;
+  padding: 0.5%;
+  white-space: wrap;
+  p {
+    padding-top: 2px;
+    margin: 0;
+    font-size: 1.2vw;
+  }
+}
+
+.start-time {
+  width: 9%;
+  padding: 0.5%;
+  font-size: 1.2vw;
+  text-align: center;
+  white-space: wrap;
+}
+
+.end-time {
+  width: 9%;
+  padding: 0.5%;
+  font-size: 1.2vw;
+  text-align: center;
+  white-space: wrap;
+}
+
+.status {
+  width: 8%;
+  padding: 8px 0.5%;;
+  font-size: 1.2vw;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.status-ready {
+  background-color: rgba(0, 174, 114, 1);
+}
+
+.status-progress {
+  background-color: rgba(35, 104, 255, 1);
+}
+
+.actions {
   display: flex;
   align-items: center;
-  font-weight: 500;
-  padding: 10px 0px;
-  &:hover {
-    background-color: #e1effc;
-  }
+  gap: 0.75%;
 
-  .nomer {
-    width: 3%;
-    padding: 3px;
-    font-size: 1.2vw;
-    text-align: center;
-  }
-
-  .task {
-    width: 37%;
-    padding: 3px;
-    font-size: 1.2vw;
-  }
-
-  .performers {
-    width: 23%;
-    padding: 3px;
-
-    p {
-      padding-top: 2px;
-      margin: 0;
-      font-size: 1.2vw;
-    }
-  }
-
-  .start-time {
-    width: 10%;
-    padding: 3px;
-    font-size: 1.2vw;
-    text-align: center;
-  }
-
-  .end-time {
-    width: 10%;
-    padding: 3px;
-    font-size: 1.2vw;
-    text-align: center;
-  }
-
-  .status {
-    width: 8%;
-    padding: 8px 3px;
-    font-size: 1.2vw;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 10px;
-    color: #fff;
-  }
-
-  .status-ready {
-    background-color: rgba(0, 174, 114, 1);
-  }
-
-  .status-progress {
-    background-color: rgba(35, 104, 255, 1);
-  }
-
-  .actions {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    img {
-      padding: 5px;
-      cursor: pointer;
-    }
-    .delete-img{
-      display: none;
-    }
-
-    width: 8%;
-    justify-content: center;
-  }
-}
-
-.main-main {
-  border-bottom: 1px solid black;
-}
-
-.modal {
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.5); /* Добавляем полупрозрачный фон */
-}
-
-.line {
-  min-width: 175px;
-  display: flex;
-  h1 {
-    margin-top: -2%;
-    min-width: 175px;
-    font-size: 70%;
-    white-space: normal;
-  }
   img {
-    margin-top: -1%;
-    margin-right: 1%;
-    width: 35px;
     padding: 5px;
     cursor: pointer;
   }
+  .delete-img{
+    display: none;
+  }
+
+  width: 8%;
+  justify-content: center;
+}
+}
+
+.main-main {
+border-bottom: 1px solid black;
+}
+
+.modal {
+position: fixed;
+z-index: 1;
+top: 0;
+left: 0;
+height: 100vh;
+width: 100vw;
+display: flex;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+background-color: rgba(0, 0, 0, 0.5); /* Добавляем полупрозрачный фон */
+}
+
+.line {
+min-width: 175px;
+display: flex;
+h1 {
+  margin-top: -2%;
+  min-width: 175px;
+  font-size: 70%;
+  white-space: normal;
+}
+img {
+  margin-top: -1%;
+  margin-right: 1%;
+  width: 35px;
+  padding: 5px;
+  cursor: pointer;
+}
 }
 
 .modal-content {
-  box-shadow: 0px 0px 15px -6px black;
-  min-width: 175px;
-  background-color: #f9f9fb;
-  margin: auto;
-  padding: 20px;
-  border: 2px solid rgba(35, 104, 255, 1);
-  border-radius: 20px;
-  width: 75%;
-  min-height: 85%;
-  height: 85%;
-  position: relative; /* Добавляем position relative для контейнера */
+box-shadow: 0px 0px 15px -6px black;
+min-width: 175px;
+background-color: #f9f9fb;
+margin: auto;
+padding: 20px;
+border: 2px solid rgba(35, 104, 255, 1);
+border-radius: 20px;
+width: 75%;
+min-height: 85%;
+height: 85%;
+position: relative; /* Добавляем position relative для контейнера */
 
-  .zag {
+.zag {
+  width: 100%;
+  font-size: 3vw;
+  text-align: center;
+}
+
+.opisanie {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  height: 46%;
+
+  textarea {
     width: 100%;
-    font-size: 3vw;
-    text-align: center;
+    height: 80%;
+    font-size: 1.5vw;
+    font-weight: 500;
+    font-family: "Montserrat";
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+    resize: none;
+    padding: 2%;
+    transition: border-color 0.3s ease;
   }
 
-  .opisanie {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    height: 46%;
+  textarea:hover {
+    border: 2px solid #2368ff;
+  }
+}
 
-    textarea {
-      width: 100%;
-      height: 80%;
-      font-size: 1.5vw;
+.bottom-module {
+  display: flex;
+  justify-content: space-between;
+
+  .select-users {
+    position: relative;
+
+    .dropdown {
+      width: 35vw;
+      max-height: 35vh;
+      overflow: auto;
+      border: 1px solid #ccc;
+      background-color: white;
+      z-index: 1000;
+      font-size: 1.4vw;
       font-weight: 500;
-      font-family: "Montserrat";
-      border-radius: 10px;
-      border: 2px solid #ffffff;
-      resize: none;
-      padding: 2%;
-      transition: border-color 0.3s ease;
-    }
-
-    textarea:hover {
-      border: 2px solid #2368ff;
-    }
-  }
-
-  .bottom-module {
-    display: flex;
-    justify-content: space-between;
-
-    .select-users {
-      position: relative;
-
-      .dropdown {
-        width: 35vw;
-        max-height: 35vh;
-        overflow: auto;
-        border: 1px solid #ccc;
-        background-color: white;
-        z-index: 1000;
-        font-size: 1.4vw;
-        font-weight: 500;
 
 
-        .dropdown-content {
-          padding: 10px;
+      .dropdown-content {
+        padding: 10px;
+        
+        
+        label {
+          display: flex;
+          align-items: center;
+          margin-bottom: 5px;
+          padding: 5px;
+          cursor: pointer;
+          &:hover {
+            background-color: #a2ebff; /* Цвет фона при наведении */
+          }
           
-          
-          label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            padding: 5px;
-            cursor: pointer;
-            &:hover {
-              background-color: #a2ebff; /* Цвет фона при наведении */
-            }
+
+          input[type="checkbox"] {
+            display: none; /* Скрываем стандартный чекбокс */
             
+          }
 
-            input[type="checkbox"] {
-              display: none; /* Скрываем стандартный чекбокс */
-              
-            }
+          input[type="checkbox"] + span {
+            display: inline-block;
+            width: 24px; /* Увеличиваем размер чекбокса */
+            height: 24px; /* Увеличиваем размер чекбокса */
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            margin-right: 10px;
+            position: relative;
+            transition: background-color 0.3s ease; /* Добавляем плавный переход для фона */
+            
+          }
 
-            input[type="checkbox"] + span {
-              display: inline-block;
-              width: 24px; /* Увеличиваем размер чекбокса */
-              height: 24px; /* Увеличиваем размер чекбокса */
-              border: 2px solid #ccc;
-              border-radius: 4px;
-              background-color: white;
-              margin-right: 10px;
-              position: relative;
-              transition: background-color 0.3s ease; /* Добавляем плавный переход для фона */
-              
-            }
-
-            input[type="checkbox"]:checked + span {
-              background-color: #2368ff; /* Цвет фона при выборе */
-              border-color: #2368ff; /* Цвет границы при выборе */
-            }
+          input[type="checkbox"]:checked + span {
+            background-color: #2368ff; /* Цвет фона при выборе */
+            border-color: #2368ff; /* Цвет границы при выборе */
           }
         }
       }
     }
+  }
 
-    .select-date {
-      display: flex;
+  .select-date {
+    display: flex;
 
-      .select-start, .select-end {
-        margin-right: 20px;
+    .select-start, .select-end {
+      margin-right: 20px;
+      text-align: center;
+
+      p {
+        margin-bottom: 5px;
+        font-size: 1.4vw;
+        font-weight: 500;
+      }
+
+      input[type="text"] {
+        font-size: 1.4vw; /* Увеличиваем шрифт для поля выбора даты */
+        font-weight: 500;
         text-align: center;
-
-        p {
-          margin-bottom: 5px;
-          font-size: 1.4vw;
-          font-weight: 500;
-        }
-
-        input[type="date"] {
-          font-size: 1.4vw; /* Увеличиваем шрифт для поля выбора даты */
-          font-weight: 500;
-          padding: 5px; /* Добавляем отступы для улучшения внешнего вида */
-          border: 1px solid #ccc; /* Добавляем границу для улучшения внешнего вида */
-          border-radius: 4px; /* Добавляем скругленные углы для улучшения внешнего вида */
-        }
+        padding: 5px; /* Добавляем отступы для улучшения внешнего вида */
+        border: 1px solid #ccc; /* Добавляем границу для улучшения внешнего вида */
+        border-radius: 4px; /* Добавляем скругленные углы для улучшения внешнего вида */
       }
     }
   }
+}
 }
 
 .modal-for-redactor-users {
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.5); /* Добавляем полупрозрачный фон */
+position: fixed;
+z-index: 1;
+top: 0;
+left: 0;
+height: 100vh;
+width: 100vw;
+display: flex;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+background-color: rgba(0, 0, 0, 0.5); /* Добавляем полупрозрачный фон */
 }
 
 .line-users {
-  min-width: 175px;
-  display: flex;
-  img {
-    width: 30px;
-    padding: 5px;
-    cursor: pointer;
-  }
+min-width: 175px;
+display: flex;
+img {
+  width: 30px;
+  padding: 5px;
+  cursor: pointer;
+}
 }
 
 .modal-content-users {
-  box-shadow: 0px 0px 15px -6px black;
-  min-width: 175px;
-  background-color: #f9f9fb;
-  margin: auto;
-  padding: 20px;
-  border: 2px solid rgba(35, 104, 255, 1);
-  border-radius: 20px;
-  width: 60%;
-  min-height: 85%;
-  height: 85%;
-  position: relative; /* Добавляем position relative для контейнера */
+box-shadow: 0px 0px 15px -6px black;
+min-width: 175px;
+background-color: #f9f9fb;
+margin: auto;
+padding: 20px;
+border: 2px solid rgba(35, 104, 255, 1);
+border-radius: 20px;
+width: 60%;
+min-height: 85%;
+height: 85%;
+position: relative; /* Добавляем position relative для контейнера */
 
-  .zag-users {
-    width: 100%;
-    font-size: 2.5vw;
-    text-align: center;
-  }
+.zag-users {
+  width: 100%;
+  font-size: 2.5vw;
+  text-align: center;
+}
 
-  .input-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+.input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 
-    input {
-      flex: 1;
-      padding: 10px;
-      margin-right: 10px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: rgba(35, 104, 255, 1);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  }
-
-  .user-list {
-    max-height: 40vh;
-    overflow: auto;
-    scrollbar-width: thin; /* Для Firefox */
-    scrollbar-color: #888 #f1f1f1; /* Для Firefox */
-
-    /* Для WebKit-браузеров (Chrome, Safari) */
-    &::-webkit-scrollbar {
-      width: 12px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 10px;
-      border: 3px solid #f1f1f1;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
-
-    .user-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      padding: 5px;
-      transition: background-color 0.3s ease; /* Плавный переход фона */
-
-      &:hover {
-        background-color: #f0f0f0; /* Цвет фона при наведении */
-      }
-
-      span {
-        flex: 1;
-        font-size: 1.2vw;
-      }
-
-      img {
-        width: 20px;
-        cursor: pointer;
-      }
-    }
+  input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
   }
 
   button {
@@ -798,134 +746,194 @@ textarea{
   }
 }
 
-.modal-delete {
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.5); /* Добавляем полупрозрачный фон */
-}
+.user-list {
+  max-height: 40vh;
+  overflow: auto;
+  scrollbar-width: thin; /* Для Firefox */
+  scrollbar-color: #888 #f1f1f1; /* Для Firefox */
 
-.line-delete {
-  min-width: 175px;
-  display: flex;
-  img {
-    width: 30px;
-    padding: 5px;
-    cursor: pointer;
-  }
-}
-
-.modal-content-delete {
-  box-shadow: 0px 0px 15px -6px black;
-  min-width: 175px;
-  background-color: #f9f9fb;
-  margin: auto;
-  padding: 20px;
-  border: 2px solid rgba(35, 104, 255, 1);
-  border-radius: 20px;
-  width: 40%;
-  min-height: 30%;
-  height: 30%;
-  position: relative; /* Добавляем position relative для контейнера */
-
-  .zag-delete {
-    width: 100%;
-    font-size: 2.5vw;
-    text-align: center;
+  /* Для WebKit-браузеров (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    width: 12px;
   }
 
-  .confirmation-message {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    height: 46%;
-
-    p {
-      width: 100%;
-      font-size: 1.5vw;
-      font-weight: 500;
-      font-family: "Montserrat";
-      text-align: center;
-    }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
   }
 
-  .for-btn-end-delete {
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .user-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+    transition: background-color 0.3s ease; /* Плавный переход фона */
 
-    button {
-      padding: 10px 20px;
-      background-color: rgba(35, 104, 255, 1);
-      color: white;
-      border: none;
-      border-radius: 5px;
+    &:hover {
+      background-color: #f0f0f0; /* Цвет фона при наведении */
+    }
+
+    span {
+      flex: 1;
+      font-size: 1.2vw;
+    }
+
+    img {
+      width: 20px;
       cursor: pointer;
     }
   }
 }
 
-.print-size{
-  background-color: #fce6e6;
-  border: #555;
-  z-index: 100;
-  position: absolute;
-  right: 20px;
-  width: 20vw;
-  display: flex;
-  flex-direction: column;
+button {
+  padding: 10px 20px;
+  background-color: rgba(35, 104, 255, 1);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+}
+
+.modal-delete {
+position: fixed;
+z-index: 1;
+top: 0;
+left: 0;
+height: 100vh;
+width: 100vw;
+display: flex;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+background-color: rgba(0, 0, 0, 0.5); /* Добавляем полупрозрачный фон */
+}
+
+.line-delete {
+min-width: 175px;
+display: flex;
+img {
+  width: 30px;
+  padding: 5px;
+  cursor: pointer;
+}
+}
+
+.modal-content-delete {
+box-shadow: 0px 0px 15px -6px black;
+min-width: 175px;
+background-color: #f9f9fb;
+margin: auto;
+padding: 20px;
+border: 2px solid rgba(35, 104, 255, 1);
+border-radius: 20px;
+width: 40%;
+min-height: 30%;
+height: 30%;
+position: relative; /* Добавляем position relative для контейнера */
+
+.zag-delete {
+  width: 100%;
+  font-size: 2.5vw;
   text-align: center;
+}
+
+.confirmation-message {
+  margin-top: 20px;
+  display: flex;
   justify-content: center;
-  padding: 10px;
-  label{
-    padding: 5px 0;
-    background-color: #fbefef;
+  height: 46%;
+
+  p {
+    width: 100%;
+    font-size: 1.5vw;
+    font-weight: 500;
+    font-family: "Montserrat";
+    text-align: center;
   }
-  input{
-    background-color: #f0f0f0;
-    border: #2368ff;
+}
+
+.for-btn-end-delete {
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    padding: 10px 20px;
+    background-color: rgba(35, 104, 255, 1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
+}
+
+.print-size{
+background-color: #fce6e6;
+border: #555;
+z-index: 100;
+position: absolute;
+right: 20px;
+width: 20vw;
+display: flex;
+flex-direction: column;
+text-align: center;
+justify-content: center;
+padding: 10px;
+label{
+  padding: 5px 0;
+  background-color: #fbefef;
+}
+input{
+  background-color: #f0f0f0;
+  border: #2368ff;
+  font-size: 1.4vw;
+  font-weight: 400;
+  padding: 5px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.for-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  button{
+    width: 45%;
     font-size: 1.4vw;
     font-weight: 400;
     padding: 5px;
-    text-align: center;
-    margin-bottom: 10px;
+    background-color:#2368ff;
+    color: #f0f0f0;
   }
-  .for-buttons{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    button{
-      width: 45%;
-      font-size: 1.4vw;
-      font-weight: 400;
-      padding: 5px;
-      background-color:#2368ff;
-      color: #f0f0f0;
-    }
-  }
-  
+}
+
 }
 
 
 @media print {
-  /* Спрятать URL при печати */
-  a[href]:after { content: none; }
-  /* Обнулить поля на странице */
-  @page { margin: 0; }
-  .top-module, .top-two-module, .status-head, .actions-head, .status, .actions { display: none !important;};
+/* Спрятать URL при печати */
+a[href]:after { content: none; }
+/* Обнулить поля на странице */
+@page { margin: 0; }
+.top-module, .top-two-module, .status-head, .actions-head, .status, .actions { display: none !important;};
 
-  .nomer-head, .nomer { width: 3vw !important; }
-  .task-head, .task { width: 53vw !important; }
-  .performers-head, .performers { width: 23vw !important; }
-  .start-time-head, .start-time { width: 7vw !important; }
-  .end-time-head { width: 9vw !important; }
-  .end-time {width: 9vw !important; }
+.nomer-head, .nomer { width: 3vw !important; }
+.task-head, .task { width: 53vw !important; }
+.performers-head, .performers { width: 23vw !important; }
+.start-time-head, .start-time { width: 7vw !important; }
+.end-time-head { width: 9vw !important; }
+.end-time {width: 9vw !important; }
 
 
 }

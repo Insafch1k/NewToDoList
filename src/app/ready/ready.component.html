@@ -25,7 +25,7 @@
 		  <img src="assets/data/icons/menu.svg" alt="">
 		  <p>Все задания</p>
 		</div>
-		<div class="at-work">
+		<div class="at-work" routerLink="/work">
 		  <img src="assets/data/icons/inwork.svg" alt="">
 		  <p>В работе</p>
 		</div>
@@ -157,16 +157,16 @@
 		  <div class="select-date">
 			<div class="select-start">
 			  <p>Начало</p>
-			  <input type="date" [(ngModel)]="editingTask.creation_date">
+			  <input type="text" [(ngModel)]="editingTask.creation_date" placeholder="дд-мм-гггг" mask="99-99-9999">
 			</div>
 			<div class="select-end">
 			  <p>Завершение</p>
-			  <input type="date" [(ngModel)]="editingTask.execution_date">
+			  <input type="text" [(ngModel)]="editingTask.execution_date" placeholder="дд-мм-гггг" mask="99-99-9999">
 			</div>
 		  </div>
 		</div>
 		<div class="for-btn-end">
-		  <button class="btn-blue" (click)="saveTask()">
+		  <button class="btn-blue" (click)="saveEditedTask()">
 			<img src="assets/data/icons/btn-plus.svg" alt="">
 			Сохранить изменения
 		  </button>
@@ -225,7 +225,7 @@
 		</div>
 	  </div>
 	</div>
-  </div>
+</div>
   
   
   

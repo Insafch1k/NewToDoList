@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { TaskService } from '../task.service';
-import { Task, Users, CreateTask, UserCreate, SearchQuery, UpdateTaskUsers,getUserId  } from '../task.model';
+import { Task, Users, CreateTask, UserCreate, SearchQuery, UpdateTaskUsers, getUserId } from '../task.model';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-all-tasks',
@@ -42,41 +41,42 @@ export class AllTasksComponent implements OnInit {
   editingTask: Task = new Task();
   newUserName: string = '';
   userToDelete: Users | null = null;
-  showPrintOne: boolean = false; // Флаг для отображения модального окна
-  currentDownloadTaskId: number | null = null; // ID текущей задачи для скачивания
-  fontSize: number = 12; // Размер шрифта по умолчанию
-  showUserDownloadModal: boolean = false; // Флаг для отображения модального окна
-  currentUserId: number | null = null; // ID текущего пользователя
-  sortOption: string = ''; // Добавим переменную для хранения текущего состояния сортировки
-  sortDirection: 'asc' | 'desc' = 'asc'; // Направление сортировки
-  
+  showPrintOne: boolean = false;
+  currentDownloadTaskId: number | null = null;
+  fontSize: number = 12;
+  showUserDownloadModal: boolean = false;
+  currentUserId: number | null = null;
+  sortOption: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const today = new Date();
-  this.todayDate = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
-  
-  if (!this.todayDate) {
-    this.todayDate = ''; // Или любое другое значение по умолчанию
-  }
+    this.todayDate = this.formatDateToEuropean(today);
 
-  this.taskService.getTasks().subscribe((data: any[]) => {
-    this.tasks = data.map(taskArray => ({
-      id: taskArray[0],
-      title: taskArray[1],
-      detail: taskArray[2],
-      creation_date: taskArray[3],
-      execution_date: taskArray[4],
-      execution_mark: taskArray[5],
-      executors: taskArray[6].split(', '), // Оставляем как массив строк
-      isDropdownOpen: false
-    }));
+    if (!this.todayDate) {
+      this.todayDate = '';
+    }
 
-    this.filteredTasks = this.tasks;
-  });
+    this.taskService.getTasks().subscribe((data: any[]) => {
+      this.tasks = data.map(taskArray => ({
+        id: taskArray[0],
+        title: taskArray[1],
+        detail: taskArray[2],
+        creation_date: this.formatDateToEuropean(new Date(taskArray[3])),
+        execution_date: this.formatDateToEuropean(new Date(taskArray[4])),
+        execution_mark: taskArray[5],
+        executors: taskArray[6].split(', '),
+        isDropdownOpen: false
+      }));
 
-  this.loadUsers();
+      this.filteredTasks = this.tasks;
+    });
+
+    this.loadUsers();
+    const testDate = new Date('2023-10-05');
+    console.log('Formatted Test Date:', this.formatDateToEuropean(testDate));
   }
 
   loadUsers() {
@@ -88,8 +88,8 @@ export class AllTasksComponent implements OnInit {
         selectedForEditTask: false,
         selectedForFilter: false
       }));
-  
-      console.log('Loaded Users:', this.users); // Логируем загруженных пользователей
+
+      console.log('Loaded Users:', this.users);
       this.performers = this.users.map(user => user.username || '');
     });
   }
@@ -100,7 +100,6 @@ export class AllTasksComponent implements OnInit {
     this.applyFilters();
   }
 
-  
   sortBy(column: string) {
     if (this.sortOption === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -113,7 +112,7 @@ export class AllTasksComponent implements OnInit {
 
   applyFilters() {
     let filtered = [...this.tasks];
-  
+
     if (this.searchQuery || this.selectedPerformersForFilter.length > 0) {
       const params = new HttpParams();
       if (this.searchQuery) {
@@ -124,14 +123,14 @@ export class AllTasksComponent implements OnInit {
           params.append('executors_id', id.toString());
         });
       }
-  
+
       this.taskService.filterTasksByUsers(this.selectedPerformersForFilter).subscribe((data: any[]) => {
         filtered = data.map(taskArray => ({
           id: taskArray[0],
           title: taskArray[1],
           detail: taskArray[2],
-          creation_date: taskArray[3],
-          execution_date: taskArray[4],
+          creation_date: this.formatDateToEuropean(new Date(taskArray[3])),
+          execution_date: this.formatDateToEuropean(new Date(taskArray[4])),
           execution_mark: taskArray[5],
           executors: taskArray[6].split(', '),
           isDropdownOpen: false
@@ -143,7 +142,7 @@ export class AllTasksComponent implements OnInit {
     } else {
       this.filteredTasks = filtered;
     }
-  
+
     if (this.sortOption) {
       filtered.sort((a, b) => {
         if (this.sortOption === 'id' || this.sortOption === 'creation_date' || this.sortOption === 'execution_date') {
@@ -158,7 +157,7 @@ export class AllTasksComponent implements OnInit {
         return 0;
       });
     }
-  
+
     this.filteredTasks = filtered;
   }
 
@@ -168,7 +167,7 @@ export class AllTasksComponent implements OnInit {
   }
 
   togglePerformerSelection(performer: string | undefined) {
-    if (!performer) return; // Прерываем выполнение, если performer не определён
+    if (!performer) return;
     const performerId = this.users.find(user => user.username === performer)?.id;
     if (performerId !== undefined) {
       if (this.selectedPerformers.includes(performerId)) {
@@ -217,10 +216,9 @@ export class AllTasksComponent implements OnInit {
 
   openModal() {
     this.showModal = true;
-  
-    // Устанавливаем сегодняшнюю дату по умолчанию
-    this.startDate = this.todayDate ?? ''; // Если todayDate undefined, используем пустую строку
-    this.endDate = this.todayDate ?? ''; // Если todayDate undefined, используем пустую строку
+
+    this.startDate = this.todayDate ?? '';
+    this.endDate = this.todayDate ?? '';
   }
 
   closeModal(event: MouseEvent) {
@@ -231,48 +229,40 @@ export class AllTasksComponent implements OnInit {
     this.currentDownloadTaskId = taskId;
     this.showPrintOne = true;
   }
-  
+
   closeDownloadSizeModal() {
     this.currentDownloadTaskId = null;
-    this.fontSize = 12; // Сброс значения размера шрифта
+    this.fontSize = 12;
     this.showPrintOne = false;
   }
 
   openEditModal(task: Task) {
-    this.editingTask = { ...task }; // Копируем задачу для редактирования
+    this.editingTask = { ...task };
     this.currentTaskId = task.id !== undefined ? task.id : null;
   
     if (this.currentTaskId !== null) {
-      console.log('Fetching executors for task ID:', this.currentTaskId);
-  
-      // Получаем исполнителей задачи с сервера
       this.taskService.getTaskExecutors(this.currentTaskId).subscribe((executors: getUserId[]) => {
-        console.log('Task Executors Response:', executors); // Логируем ответ сервера
+        this.selectedPerformers = executors.map(executor => executor.id!);
+        this.users.forEach(user => {
+          user.selectedForEditTask = this.selectedPerformers.includes(user.id);
+        });
   
-        if (!executors || executors.length === 0) {
-          console.warn('No executors found for the task');
-          this.selectedPerformers = [];
-        } else {
-          // Инициализируем selectedPerformers на основе полученных исполнителей
-          this.selectedPerformers = executors.map(executor => executor.id!);
-          console.log('Selected Performers:', this.selectedPerformers); // Логируем выбранных исполнителей
+        this.editingTask.creation_date = this.formatDateToEuropean(new Date(task.creation_date));
+        this.editingTask.execution_date = this.formatDateToEuropean(new Date(task.execution_date));
   
-          // Сопоставляем исполнителей с пользователями
-          this.users.forEach(user => {
-            user.selectedForEditTask = this.selectedPerformers.includes(user.id);
-          });
+        console.log('Editing Task:', this.editingTask);
   
-          console.log('Users with selectedForEditTask:', this.users); // Логируем состояние пользователей
-        }
-  
-        this.showEditModal = true; // Открываем модальное окно
+        this.showEditModal = true;
+        this.cdr.detectChanges();
       }, error => {
-        console.error('Error fetching task executors:', error); // Логируем ошибку, если она возникает
+        console.error('Error fetching task executors:', error);
       });
-    } else {
-      console.error('currentTaskId is null');
     }
   }
+  
+  
+  
+  
 
   closeEditModal(event: MouseEvent) {
     this.showEditModal = false;
@@ -311,19 +301,16 @@ export class AllTasksComponent implements OnInit {
       this.taskService.createUser(user).subscribe(
         response => {
           console.log('User created successfully', response);
-  
-          // Очищаем поле ввода
+
           this.newUserName = '';
           if (this.inputElement && this.inputElement.nativeElement) {
-            this.inputElement.nativeElement.value = ''; // Очистить значение input
+            this.inputElement.nativeElement.value = '';
           }
-  
-          // Обновляем список пользователей
+
           this.loadUsers();
-  
-          // Принудительно обновляем представление
+
           this.cdr.detectChanges();
-  
+
         },
         error => {
           console.error('Error creating user', error);
@@ -335,6 +322,33 @@ export class AllTasksComponent implements OnInit {
   }
 
   createNewTask() {
+    // Проверяем, что описание задачи не пустое
+    if (!this.newTaskDescription.trim()) {
+      alert('Описание задачи не может быть пустым.');
+      return;
+    }
+  
+    // Проверяем, что выбрана хотя бы одна дата
+    if (!this.startDate || !this.endDate) {
+      alert('Пожалуйста, выберите даты начала и завершения задачи.');
+      return;
+    }
+  
+    // Проверяем, что дата завершения не раньше даты начала
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+    if (end < start) {
+      alert('Дата завершения не может быть раньше даты начала.');
+      return;
+    }
+  
+    // Проверяем, что выбран хотя бы один исполнитель
+    if (this.selectedPerformers.length === 0) {
+      alert('Пожалуйста, выберите хотя бы одного исполнителя.');
+      return;
+    }
+  
+    // Создаем новое задание
     const newTask: CreateTask = {
       title: this.newTaskDescription,
       detail: "нет",
@@ -346,61 +360,73 @@ export class AllTasksComponent implements OnInit {
   
     this.taskService.createTask(newTask).subscribe(
       () => {
-        console.log('Task created successfully');
-  
-        // Перезагружаем список задач
+        console.log('Задача успешно создана');
         this.loadTasks();
-  
-        // Закрываем модальное окно
         this.closeModal(new MouseEvent('click'));
-  
-        // Очищаем поля формы
         this.newTaskDescription = '';
         this.startDate = '';
         this.endDate = '';
         this.selectedPerformers = [];
       },
       (error) => {
-        console.error('Error creating task', error);
+        console.error('Ошибка при создании задачи', error);
+        alert('Произошла ошибка при создании задачи. Пожалуйста, попробуйте снова.');
       }
     );
   }
   
+
   loadTasks() {
-    this.taskService.getTasks2().subscribe((data: any[]) => {
+    this.taskService.getTasks().subscribe((data: any[]) => {
       this.tasks = data.map(taskArray => ({
         id: taskArray[0],
         title: taskArray[1],
         detail: taskArray[2],
-        creation_date: taskArray[3],
-        execution_date: taskArray[4],
+        creation_date: this.formatDateToEuropean(new Date(taskArray[3])),
+        execution_date: this.formatDateToEuropean(new Date(taskArray[4])),
         execution_mark: taskArray[5],
         executors: taskArray[6].split(', '),
         isDropdownOpen: false,
       }));
-      this.filteredTasks = [...this.tasks]; // Обновляем отфильтрованный список
+      this.filteredTasks = [...this.tasks];
     });
   }
 
   saveEditedTask() {
     if (this.editingTask.id !== undefined) {
+      if (!this.editingTask.title.trim()) {
+        alert('Описание задачи не может быть пустым.');
+        return;
+      }
+  
+      if (!this.editingTask.creation_date || !this.editingTask.execution_date) {
+        alert('Пожалуйста, выберите даты начала и завершения задачи.');
+        return;
+      }
+  
       const updatedTask = {
         title: this.editingTask.title,
         detail: 'нет',
-        creation_date: this.editingTask.creation_date,
-        execution_date: this.editingTask.execution_date,
-        execution_mark: this.editingTask.execution_mark
+        creation_date: this.formatDateToISO(this.editingTask.creation_date),
+        execution_date: this.formatDateToISO(this.editingTask.execution_date),
+        execution_mark: this.editingTask.execution_mark,
+        executors: this.selectedPerformers
       };
-
+  
       this.taskService.updateTask(this.editingTask.id, updatedTask).subscribe(response => {
-        console.log('Task updated successfully', response);
+        console.log('Задача успешно обновлена', response);
         this.closeEditModal(new MouseEvent('click'));
         this.applyFilters();
       }, error => {
-        console.error('Error updating task', error);
+        console.error('Ошибка при обновлении задачи', error);
+        alert('Произошла ошибка при сохранении задачи. Пожалуйста, проверьте данные и попробуйте снова.');
       });
+    } else {
+      console.error('ID задачи не определен');
     }
   }
+  
+  
 
   openRedactor(task: Task) {
     this.editingTask = { ...task };
@@ -446,27 +472,6 @@ export class AllTasksComponent implements OnInit {
     this.isDropdown2Open = false;
   }
 
-  // downloadFile(taskId: number) {
-  //   if (taskId !== undefined) {
-  //     this.taskService.downloadFile(taskId).subscribe(blob => {
-  //       const url = window.URL.createObjectURL(blob);
-  //       const a = document.createElement('a');
-  //       a.href = url;
-  //       a.download = 'Таткоммунэнерго.pdf';
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       document.body.removeChild(a);
-  //       window.URL.revokeObjectURL(url);
-  //     });
-  //   }
-  // }
-
-
-  
-  
-  
-  
-
   deleteTask(taskId: number) {
     if (taskId !== undefined) {
       this.taskService.deleteTask(taskId).subscribe(() => {
@@ -478,6 +483,8 @@ export class AllTasksComponent implements OnInit {
 
   toggleStatusDropdown(task: Task) {
     task.isDropdownOpen = !task.isDropdownOpen;
+    const newStatus = task.execution_mark === 'Готово' ? 'В работе' : 'Готово';
+    this.updateStatus(task, newStatus);
   }
 
   updateStatus(task: Task, status: string) {
@@ -488,6 +495,7 @@ export class AllTasksComponent implements OnInit {
     }, error => {
       console.error('Error updating task status', error);
     });
+    
   }
 
   saveTask() {
@@ -536,13 +544,13 @@ export class AllTasksComponent implements OnInit {
 
   filterTasksByPerformers() {
     if (this.selectedPerformersForFilter.length > 0) {
-      this.taskService.filterTasksByUsers2(this.selectedPerformersForFilter).subscribe((data: any[]) => {
+      this.taskService.filterTasksByUsers(this.selectedPerformersForFilter).subscribe((data: any[]) => {
         this.filteredTasks = data.map(taskArray => ({
           id: taskArray[0],
           title: taskArray[1],
           detail: taskArray[2],
-          creation_date: taskArray[3],
-          execution_date: taskArray[4],
+          creation_date: this.formatDateToEuropean(new Date(taskArray[3])),
+          execution_date: this.formatDateToEuropean(new Date(taskArray[4])),
           execution_mark: taskArray[5],
           executors: taskArray[6].split(', '),
           isDropdownOpen: false
@@ -552,16 +560,18 @@ export class AllTasksComponent implements OnInit {
       this.filteredTasks = this.tasks;
     }
   }
+
   openUserDownloadModal(userId: number) {
     this.currentUserId = userId;
     this.showUserDownloadModal = true;
   }
-  
+
   closeUserDownloadModal() {
     this.currentUserId = null;
-    this.fontSize = 12; // Сброс значения размера шрифта
+    this.fontSize = 12;
     this.showUserDownloadModal = false;
   }
+
   downloadUserTasksWithFontSize() {
     if (this.currentUserId !== null && this.fontSize > 0) {
       this.taskService.downloadUserTasksWithFontSize(this.currentUserId, this.fontSize).subscribe(
@@ -574,8 +584,8 @@ export class AllTasksComponent implements OnInit {
           a.click();
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
-  
-          this.closeUserDownloadModal(); // Закрываем модальное окно после скачивания
+
+          this.closeUserDownloadModal();
         },
         (error) => {
           console.error('Error downloading user tasks', error);
@@ -589,7 +599,7 @@ export class AllTasksComponent implements OnInit {
   downloadFileWithFontSize(taskId: number) {
     if (taskId !== undefined && this.fontSize > 0) {
         const downloadRequest = {
-            text_size: this.fontSize // Передаём размер шрифта
+            font_size: this.fontSize
         };
 
         this.taskService.downloadFileWithFontSize(taskId, downloadRequest).subscribe(
@@ -597,7 +607,6 @@ export class AllTasksComponent implements OnInit {
                 let blob: Blob;
                 let filename: string;
 
-                // Если сервер возвращает Blob
                 if (response.body instanceof Blob) {
                     blob = response.body;
                     filename = this.extractFilenameFromHeaders(response) || 'Таткоммунэнерго.pdf';
@@ -607,7 +616,7 @@ export class AllTasksComponent implements OnInit {
                 }
 
                 this.saveBlobAsFile(blob, filename);
-                this.closeDownloadSizeModal(); // Закрываем модальное окно после скачивания
+                this.closeDownloadSizeModal();
             },
             (error) => {
                 console.error('Error downloading file', error);
@@ -616,32 +625,42 @@ export class AllTasksComponent implements OnInit {
     } else {
         console.error('Invalid font size or task ID');
     }
+    console.log(this.fontSize)
 }
-private extractFilenameFromHeaders(response: any): string | null {
-  const contentDisposition = response.headers.get('Content-Disposition');
 
-  if (contentDisposition) {
-      // Парсим Content-Disposition для извлечения filename
-      const match = contentDisposition.match(/filename=["']?([^"']+)/);
-      if (match && match[1]) {
-          return match[1]; // Возвращаем оригинальное имя файла (KP_102.pdf)
-      }
+  private extractFilenameFromHeaders(response: any): string | null {
+    const contentDisposition = response.headers.get('Content-Disposition');
+
+    if (contentDisposition) {
+        const match = contentDisposition.match(/filename=["']?([^"']+)/);
+        if (match && match[1]) {
+            return match[1];
+        }
+    }
+
+    return null;
   }
 
-  return null;
-}
-private saveBlobAsFile(blob: Blob, filename: string) {
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
+  private saveBlobAsFile(blob: Blob, filename: string) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
 
-  // Устанавливаем имя файла через атрибут download
-  a.download = filename;
-
-  document.body.appendChild(a);
-  a.click();
-
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(url);
-}
+  private formatDateToEuropean(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+  private formatDateToISO(dateString: string): string {
+    const [day, month, year] = dateString.split('-');
+    return `${year}-${month}-${day}`;
+  }
+  
 }

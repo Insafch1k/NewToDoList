@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Task, Users, CreateTask, UserCreate, UpdateStatus, getUserId, SearchQuery, UpdateTaskUsers, UserResponse } from './task.model';
 
-const API = "http://192.168.1.238:6200";
+const API = "http://192.168.88.81:8083";
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,7 @@ export class TaskService {
 
   // Метод для получения всех пользователей
   getUsers(): Observable<Users[]> {
-    return this.http.get<Users[]>(`${API}/users`).pipe(
+    return this.http.get<Users[]>(`${API}/users/`).pipe(
       catchError(this.handleError)
     );
   }
@@ -78,8 +78,10 @@ export class TaskService {
   // }
     // Метод для скачивания файла с указанием размера шрифта
     // Метод для скачивания файла с указанием размера шрифта
+
+
   // Метод для скачивания файла с указанием размера шрифта
-  downloadFileWithFontSize(id: number, request: { text_size: number }): Observable<HttpResponse<Blob>> {
+  downloadFileWithFontSize(id: number, request: { font_size: number }): Observable<HttpResponse<Blob>> {
     const url = `${API}/tasks/${id}/download`;
 
     return this.http.post<Blob>(url, request, {
@@ -207,7 +209,7 @@ export class TaskService {
   // Метод для скачивания всех задач исполнителя с указанием размера шрифта
   downloadUserTasksWithFontSize(userId: number, fontSize: number): Observable<Blob> {
     const url = `${API}/tasks/${userId}/user_tasks_pdf`;
-    const body = { text_size: fontSize };
+    const body = { font_size: fontSize };
   
     return this.http.post(url, body, { responseType: 'blob' }).pipe(
       tap(response => console.log('Backend Response for User Tasks Download:', response)),
