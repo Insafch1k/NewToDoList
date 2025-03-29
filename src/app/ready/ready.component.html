@@ -135,44 +135,72 @@
   
 	<!-- окно для редактирования -->
 	<div class="modal" *ngIf="showEditModal">
-	  <div class="modal-content">
-		<div class="line">
-		  <h1 class="zag">Редактировать задание</h1>
-		  <img (click)="closeEditModal($event)" src="assets/data/icons/big-delete.svg" />
-		</div>
-		<div class="opisanie">
-		  <textarea [(ngModel)]="editingTask.title" placeholder="Напишите задание для выполнения"></textarea>
-		</div>
-		<div class="bottom-module">
-		  <div class="select-users">
-			<div class="dropdown">
-			  <div class="dropdown-content">
-				<label *ngFor="let user of users">
-				  <input type="checkbox" [(ngModel)]="user.selectedForEditTask">
-				  <span></span> {{ user.username }}
-				</label>
+		<div class="modal-content">
+		  <div class="line">
+			<h1 class="zag">Редактировать задание</h1>
+			<img (click)="closeEditModal($event)" src="assets/data/icons/big-delete.svg" />
+		  </div>
+		  <div class="opisanie">
+			<textarea [(ngModel)]="editingTask.title" placeholder="Напишите задание для выполнения"></textarea>
+		  </div>
+		  <div class="bottom-module">
+			<div class="select-users">
+			  <div class="dropdown">
+				<div class="dropdown-content">
+				  <label *ngFor="let user of users">
+					<input type="checkbox" [(ngModel)]="user.selectedForEditTask" (change)="updateSelectedPerformers()">
+					<span></span> {{ user.username }}
+				  </label>
+				</div>
+			  </div>
+			</div>
+			<div class="select-date">
+				<div class="select-start">
+					<p>Начало</p>
+					<input type="text" [(ngModel)]="editingTask.creation_date" placeholder="дд-мм-гггг" mask="99-99-9999" (click)="toggleDatepicker('start', $event)" readonly>
+					<div class="calendar" *ngIf="showStartCalendar">
+					  <div class="calendar-header">
+						<button (click)="prevMonth('start')">‹</button>
+						<span>{{ currentMonthName }} {{ currentYear }}</span>
+						<button (click)="nextMonth('start')">›</button>
+					  </div>
+					  <div class="calendar-body">
+						<div *ngFor="let day of daysOfWeek">{{ day }}</div>
+						<div *ngFor="let day of daysInMonth" (click)="selectDate(day, 'start')" [ngClass]="{'selected': isSelectedDate(day, 'start')}">
+						  {{ day ? day.getDate() : '' }}
+						</div>
+					  </div>
+					</div>
+				  </div>
+				  <div class="select-end">
+					<p>Завершение</p>
+					<input type="text" [(ngModel)]="editingTask.execution_date" placeholder="дд-мм-гггг" mask="99-99-9999" (click)="toggleDatepicker('end', $event)" readonly>
+					<div class="calendar" *ngIf="showEndCalendar">
+					  <div class="calendar-header">
+						<button (click)="prevMonth('end')">‹</button>
+						<span>{{ currentMonthName }} {{ currentYear }}</span>
+						<button (click)="nextMonth('end')">›</button>
+					  </div>
+					  <div class="calendar-body">
+						<div *ngFor="let day of daysOfWeek">{{ day }}</div>
+						<div *ngFor="let day of daysInMonth" (click)="selectDate(day, 'end')" [ngClass]="{'selected': isSelectedDate(day, 'end')}">
+						  {{ day ? day.getDate() : '' }}
+						</div>
+				  </div>
+				</div>
 			  </div>
 			</div>
 		  </div>
-		  <div class="select-date">
-			<div class="select-start">
-			  <p>Начало</p>
-			  <input type="text" [(ngModel)]="editingTask.creation_date" placeholder="дд-мм-гггг" mask="99-99-9999">
-			</div>
-			<div class="select-end">
-			  <p>Завершение</p>
-			  <input type="text" [(ngModel)]="editingTask.execution_date" placeholder="дд-мм-гггг" mask="99-99-9999">
-			</div>
+		  <div class="for-btn-end">
+			<button class="btn-blue" (click)="saveEditedTask()">
+			  <img src="assets/data/icons/btn-plus.svg" alt="">
+			  Сохранить изменения
+			</button>
 		  </div>
 		</div>
-		<div class="for-btn-end">
-		  <button class="btn-blue" (click)="saveEditedTask()">
-			<img src="assets/data/icons/btn-plus.svg" alt="">
-			Сохранить изменения
-		  </button>
-		</div>
 	  </div>
-	</div>
+	  
+	  
   
 	<!-- окно для редактирования пользователей -->
   <div class="modal-for-redactor-users" *ngIf="showUsersModal">
@@ -226,6 +254,3 @@
 	  </div>
 	</div>
 </div>
-  
-  
-  

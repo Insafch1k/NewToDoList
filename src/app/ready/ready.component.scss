@@ -214,3 +214,51 @@ margin-top: 0%;
   color: #f5f4f4;
 }
 }
+
+
+.datepicker {
+  position: relative;
+  display: inline-block;
+}
+
+.calendar {
+  position: absolute;
+  top: 6vh;
+  left: 30vw;
+  border: 1px solid #ccc;
+  background-color: white;
+  z-index: 1000;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.calendar-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  padding: 10px;
+}
+
+.calendar-body div {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Плавный переход для изменения цвета */
+}
+
+.calendar-body div:hover {
+  background-color: #007bff; /* Цвет фона при наведении */
+  color: white; /* Цвет текста при наведении */
+}
+
+.calendar-body div.selected {
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+}
+

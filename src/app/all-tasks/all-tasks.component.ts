@@ -11,6 +11,8 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 export class AllTasksComponent implements OnInit {
   @ViewChild('inputElement', { static: false }) inputElement!: ElementRef;
 
+
+
   tasks: Task[] = [];
   users: Users[] = [];
   currentTask: string = '';
@@ -48,6 +50,13 @@ export class AllTasksComponent implements OnInit {
   currentUserId: number | null = null;
   sortOption: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  showStartCalendar: boolean = false;
+  showEndCalendar: boolean = false;
+  currentDate: Date = new Date();
+  currentMonth: number = this.currentDate.getMonth();
+  currentYear: number = this.currentDate.getFullYear();
+  daysOfWeek: string[] = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  daysInMonth: (Date | null)[] = [];
 
   constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {}
 
@@ -78,6 +87,8 @@ export class AllTasksComponent implements OnInit {
     const testDate = new Date('2023-10-05');
     console.log('Formatted Test Date:', this.formatDateToEuropean(testDate));
   }
+
+  
 
   loadUsers() {
     this.taskService.getUsers().subscribe((usersData: any[]) => {
@@ -203,12 +214,23 @@ export class AllTasksComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const dropdown = document.querySelector('.dropdown-menu');
-    if (dropdown && !dropdown.contains(event.target as Node)) {
-      this.isOpen = false;
-    }
+onDocumentClick(event: MouseEvent) {
+  const dropdown = document.querySelector('.dropdown-menu');
+  if (dropdown && !dropdown.contains(event.target as Node)) {
+    this.isOpen = false;
   }
+
+  const startCalendarElement = document.querySelector('.select-start .calendar');
+  const endCalendarElement = document.querySelector('.select-end .calendar');
+
+  // Проверяем, был ли клик вне области календаря
+  if (startCalendarElement && !startCalendarElement.contains(event.target as Node)) {
+    this.showStartCalendar = false;
+  }
+  if (endCalendarElement && !endCalendarElement.contains(event.target as Node)) {
+    this.showEndCalendar = false;
+  }
+}
 
   toggleModuleDownload(){
     this.isDownloadOpen = !this.isDownloadOpen;
@@ -239,19 +261,20 @@ export class AllTasksComponent implements OnInit {
   openEditModal(task: Task) {
     this.editingTask = { ...task };
     this.currentTaskId = task.id !== undefined ? task.id : null;
-  
+
     if (this.currentTaskId !== null) {
       this.taskService.getTaskExecutors(this.currentTaskId).subscribe((executors: getUserId[]) => {
         this.selectedPerformers = executors.map(executor => executor.id!);
         this.users.forEach(user => {
           user.selectedForEditTask = this.selectedPerformers.includes(user.id);
         });
-  
-        this.editingTask.creation_date = this.formatDateToEuropean(new Date(task.creation_date));
-        this.editingTask.execution_date = this.formatDateToEuropean(new Date(task.execution_date));
-  
+
+        // Преобразуем строку даты в объект Date
+        this.editingTask.creation_date = this.parseDateString(task.creation_date);
+        this.editingTask.execution_date = this.parseDateString(task.execution_date);
+
         console.log('Editing Task:', this.editingTask);
-  
+
         this.showEditModal = true;
         this.cdr.detectChanges();
       }, error => {
@@ -259,10 +282,12 @@ export class AllTasksComponent implements OnInit {
       });
     }
   }
-  
-  
-  
-  
+
+  private parseDateString(dateString: string): string {
+    const [day, month, year] = dateString.split('-');
+    const date = new Date(+year, +month - 1, +day);
+    return this.formatDateToEuropean(date);
+  }
 
   closeEditModal(event: MouseEvent) {
     this.showEditModal = false;
@@ -291,6 +316,8 @@ export class AllTasksComponent implements OnInit {
       this.taskService.deleteUser(this.userToDelete.id!).subscribe(() => {
         this.loadUsers();
         this.closeDeleteConfirmation(new MouseEvent('click'));
+
+        this.loadTasks();
       });
     }
   }
@@ -327,13 +354,13 @@ export class AllTasksComponent implements OnInit {
       alert('Описание задачи не может быть пустым.');
       return;
     }
-  
+
     // Проверяем, что выбрана хотя бы одна дата
     if (!this.startDate || !this.endDate) {
       alert('Пожалуйста, выберите даты начала и завершения задачи.');
       return;
     }
-  
+
     // Проверяем, что дата завершения не раньше даты начала
     const start = new Date(this.startDate);
     const end = new Date(this.endDate);
@@ -341,13 +368,13 @@ export class AllTasksComponent implements OnInit {
       alert('Дата завершения не может быть раньше даты начала.');
       return;
     }
-  
+
     // Проверяем, что выбран хотя бы один исполнитель
     if (this.selectedPerformers.length === 0) {
       alert('Пожалуйста, выберите хотя бы одного исполнителя.');
       return;
     }
-  
+
     // Создаем новое задание
     const newTask: CreateTask = {
       title: this.newTaskDescription,
@@ -357,7 +384,7 @@ export class AllTasksComponent implements OnInit {
       execution_date: this.endDate,
       execution_mark: 'В работе',
     };
-  
+
     this.taskService.createTask(newTask).subscribe(
       () => {
         console.log('Задача успешно создана');
@@ -374,7 +401,6 @@ export class AllTasksComponent implements OnInit {
       }
     );
   }
-  
 
   loadTasks() {
     this.taskService.getTasks().subscribe((data: any[]) => {
@@ -398,25 +424,26 @@ export class AllTasksComponent implements OnInit {
         alert('Описание задачи не может быть пустым.');
         return;
       }
-  
+
       if (!this.editingTask.creation_date || !this.editingTask.execution_date) {
         alert('Пожалуйста, выберите даты начала и завершения задачи.');
         return;
       }
-  
+
       const updatedTask = {
         title: this.editingTask.title,
         detail: 'нет',
         creation_date: this.formatDateToISO(this.editingTask.creation_date),
         execution_date: this.formatDateToISO(this.editingTask.execution_date),
         execution_mark: this.editingTask.execution_mark,
-        executors: this.selectedPerformers
+        executors: this.selectedPerformers // Убедитесь, что этот список обновлен
       };
-  
+
       this.taskService.updateTask(this.editingTask.id, updatedTask).subscribe(response => {
         console.log('Задача успешно обновлена', response);
         this.closeEditModal(new MouseEvent('click'));
         this.applyFilters();
+        this.loadTasks();
       }, error => {
         console.error('Ошибка при обновлении задачи', error);
         alert('Произошла ошибка при сохранении задачи. Пожалуйста, проверьте данные и попробуйте снова.');
@@ -425,8 +452,92 @@ export class AllTasksComponent implements OnInit {
       console.error('ID задачи не определен');
     }
   }
+
+  updateSelectedPerformers() {
+    this.selectedPerformers = this.users
+      .filter(user => user.selectedForEditTask)
+      .map(user => user.id);
+    console.log('Updated Selected Performers:', this.selectedPerformers);
+  }
+
+  toggleDatepicker(type: 'start' | 'end', event: MouseEvent) {
+    event.stopPropagation(); // Предотвращаем всплытие события, чтобы оно не закрывало календарь сразу же
+  
+    if (type === 'start') {
+      this.showStartCalendar = !this.showStartCalendar;
+      this.showEndCalendar = false;
+    } else {
+      this.showEndCalendar = !this.showEndCalendar;
+      this.showStartCalendar = false;
+    }
+  }
   
   
+
+  generateCalendar() {
+    const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+    const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+    const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+    const endDay = lastDay.getDay() === 0 ? 6 : lastDay.getDay() - 1;
+
+    this.daysInMonth = [];
+
+    for (let i = 0; i < startDay; i++) {
+      this.daysInMonth.push(null);
+    }
+
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+      this.daysInMonth.push(new Date(this.currentYear, this.currentMonth, day));
+    }
+
+    const remainingDays = 7 - (endDay + 1);
+    for (let i = 0; i < remainingDays; i++) {
+      this.daysInMonth.push(null);
+    }
+  }
+
+  prevMonth(type: 'start' | 'end') {
+    this.currentMonth--;
+    if (this.currentMonth < 0) {
+      this.currentMonth = 11;
+      this.currentYear--;
+    }
+    this.generateCalendar();
+  }
+
+  nextMonth(type: 'start' | 'end') {
+    this.currentMonth++;
+    if (this.currentMonth > 11) {
+      this.currentMonth = 0;
+      this.currentYear++;
+    }
+    this.generateCalendar();
+  }
+
+  selectDate(day: Date | null, type: 'start' | 'end') {
+    if (day) {
+      if (type === 'start') {
+        this.editingTask.creation_date = this.formatDateToEuropean(day);
+        this.showStartCalendar = false;
+      } else {
+        this.editingTask.execution_date = this.formatDateToEuropean(day);
+        this.showEndCalendar = false;
+      }
+    }
+  }
+
+  isSelectedDate(day: Date | null, type: 'start' | 'end'): boolean {
+    if (!day) return false;
+    if (type === 'start') {
+      return this.editingTask.creation_date === this.formatDateToEuropean(day);
+    } else {
+      return this.editingTask.execution_date === this.formatDateToEuropean(day);
+    }
+  }
+
+  get currentMonthName(): string {
+    return new Date(this.currentYear, this.currentMonth).toLocaleString('ru-RU', { month: 'long' });
+  }
 
   openRedactor(task: Task) {
     this.editingTask = { ...task };
@@ -495,7 +606,7 @@ export class AllTasksComponent implements OnInit {
     }, error => {
       console.error('Error updating task status', error);
     });
-    
+
   }
 
   saveTask() {
@@ -534,6 +645,7 @@ export class AllTasksComponent implements OnInit {
       this.taskService.updateTaskExecutors(this.currentTaskId, updatedPerformers).subscribe(response => {
         console.log('Task performers updated successfully', response);
         this.closeRedactor(new MouseEvent('click'));
+
       }, error => {
         console.error('Error updating task performers', error);
       });
@@ -658,9 +770,10 @@ export class AllTasksComponent implements OnInit {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
+
   private formatDateToISO(dateString: string): string {
     const [day, month, year] = dateString.split('-');
     return `${year}-${month}-${day}`;
   }
-  
+
 }

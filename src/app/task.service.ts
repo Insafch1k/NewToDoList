@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Task, Users, CreateTask, UserCreate, UpdateStatus, getUserId, SearchQuery, UpdateTaskUsers, UserResponse } from './task.model';
 
-const API = "http://192.168.88.81:8083";
+const API = "https://great-sides-thank.loca.lt/";
 
 @Injectable({
   providedIn: 'root'
